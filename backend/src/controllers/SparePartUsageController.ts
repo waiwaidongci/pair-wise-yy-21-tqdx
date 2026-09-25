@@ -1,1 +1,11 @@
-import type { Request, Response } from "express"; import { sparePartUsageService } from "../services/SparePartUsageService"; export const sparePartUsageController = { list: (_req: Request, res: Response) => res.json(sparePartUsageService.list()), create: (req: Request, res: Response) => res.status(201).json(sparePartUsageService.create(req.body)) };
+import type { Request, Response } from "express";
+import { sparePartUsageService } from "../services/SparePartUsageService";
+import { asyncHandler } from "../utils/asyncHandler";
+
+const CONTROLLER = "SparePartUsageController";
+
+export const sparePartUsageController = {
+  list: asyncHandler(CONTROLLER, (_req: Request, res: Response) => {
+    res.json(sparePartUsageService.list());
+  })
+};

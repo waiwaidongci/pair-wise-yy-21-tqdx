@@ -1,6 +1,7 @@
 export interface SparePartUsage {
   id: number;
   ticket_id: number;
+  ticket_no: string | null;
   part_code: string;
   part_name: string;
   quantity: number;

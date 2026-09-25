@@ -1,1 +1,11 @@
-import type { Request, Response } from "express"; import { crewService } from "../services/CrewService"; export const crewController = { list: (_req: Request, res: Response) => res.json(crewService.list()), create: (req: Request, res: Response) => res.status(201).json(crewService.create(req.body)) };
+import type { Request, Response } from "express";
+import { crewService } from "../services/CrewService";
+import { asyncHandler } from "../utils/asyncHandler";
+
+const CONTROLLER = "CrewController";
+
+export const crewController = {
+  list: asyncHandler(CONTROLLER, (_req: Request, res: Response) => {
+    res.json(crewService.list());
+  })
+};

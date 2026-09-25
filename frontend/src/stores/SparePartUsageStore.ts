@@ -1,6 +1,17 @@
 import { defineStore } from "pinia";
 import { listSparePartUsage } from "../api/SparePartUsage";
+import type { SparePartUsage } from "../types/SparePartUsage";
+
 export const useSparePartUsageStore = defineStore("sparePartUsage", {
-  state: () => ({ rows: [] as Awaited<ReturnType<typeof listSparePartUsage>>, loading: false }),
-  actions: { async load() { this.loading = true; this.rows = await listSparePartUsage(); this.loading = false; } }
+  state: () => ({ rows: [] as SparePartUsage[], loading: false }),
+  actions: {
+    async load() {
+      this.loading = true;
+      try {
+        this.rows = await listSparePartUsage();
+      } finally {
+        this.loading = false;
+      }
+    }
+  }
 });

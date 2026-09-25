@@ -1,6 +1,27 @@
 import { defineStore } from "pinia";
-import { listFaultReport } from "../api/FaultReport";
+import { listFaultReport, createFaultReport } from "../api/FaultReport";
+import type { FaultReport, CreateFaultPayload } from "../types/FaultReport";
+
 export const useFaultReportStore = defineStore("faultReport", {
-  state: () => ({ rows: [] as Awaited<ReturnType<typeof listFaultReport>>, loading: false }),
-  actions: { async load() { this.loading = true; this.rows = await listFaultReport(); this.loading = false; } }
+  state: () => ({ rows: [] as FaultReport[], loading: false }),
+  getters: {
+    pending: (state) => state.rows.filter((fault) => fault.status === "PENDING"),
+    processing: (state) => state.rows.filter((fault) => fault.status === "PROCESSING"),
+    resolved: (state) => state.rows.filter((fault) => fault.status === "RESOLVED")
+  },
+  actions: {
+    async load() {
+      this.loading = true;
+      try {
+        this.rows = await listFaultReport();
+      } finally {
+        this.loading = false;
+      }
+    },
+    async register(payload: CreateFaultPayload) {
+      const fault = await createFaultReport(payload);
+      await this.load();
+      return fault;
+    }
+  }
 });

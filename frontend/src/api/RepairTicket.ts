@@ -1,21 +1,34 @@
-import { mockData } from "../mocks/seedData";
+import { request } from "./client";
 import type { RepairTicket } from "../types/RepairTicket";
+import type { CrewAvailability } from "../types/Crew";
 
-const endpoint = "/api/repair-ticket";
-
-export async function listRepairTicket(): Promise<RepairTicket[]> {
-  if (typeof fetch !== "undefined" && endpoint.startsWith("/api") && true) {
-    try {
-      const res = await fetch(endpoint);
-      if (res.ok) return await res.json();
-    } catch {
-      // Local mock fallback keeps the UI available during offline review.
-    }
-  }
-  return [...(mockData.repairTicket as unknown as RepairTicket[])];
+export function listRepairTicket(): Promise<RepairTicket[]> {
+  return request<RepairTicket[]>("/repair-ticket");
 }
 
-export async function saveRepairTicket(payload: RepairTicket) {
-  console.info("save RepairTicket", payload);
-  return payload;
+export function fetchCandidates(faultReportId: number): Promise<CrewAvailability> {
+  return request<CrewAvailability>(
+    `/repair-ticket/candidates?faultReportId=${faultReportId}`
+  );
+}
+
+export function dispatchTicket(faultReportId: number, teamId?: number): Promise<RepairTicket> {
+  return request<RepairTicket>("/repair-ticket/dispatch", {
+    method: "POST",
+    body: JSON.stringify(
+      teamId == null ? { fault_report_id: faultReportId } : { fault_report_id: faultReportId, team_id: teamId }
+    )
+  });
+}
+
+export function arriveTicket(id: number): Promise<RepairTicket> {
+  return request<RepairTicket>(`/repair-ticket/${id}/arrive`, { method: "POST" });
+}
+
+export function repairTicket(id: number): Promise<RepairTicket> {
+  return request<RepairTicket>(`/repair-ticket/${id}/repair`, { method: "POST" });
+}
+
+export function restoreTicket(id: number): Promise<RepairTicket> {
+  return request<RepairTicket>(`/repair-ticket/${id}/restore`, { method: "POST" });
 }

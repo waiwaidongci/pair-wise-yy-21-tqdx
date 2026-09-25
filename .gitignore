@@ -11,3 +11,8 @@ __pycache__/
 .pytest_cache/
 target/
 vendor/
+
+# 后端运行态 JSON 存储（首启自动生成）
+backend/data.json
+backend/data*.json
+

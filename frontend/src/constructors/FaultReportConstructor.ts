@@ -1,17 +1,17 @@
-import type { FaultReport } from "../types/FaultReport";
+import type { CreateFaultPayload } from "../types/FaultReport";
 
-export const createDefaultFaultReport = (overrides: Partial<FaultReport> = {}): FaultReport => ({
-  id: 1 as never,
-  reporter_name: "reporter name 1" as never,
-  phone: "13800000001" as never,
-  asset_id: 1 as never,
-  fault_type: "VOLTAGE_LOW" as never,
-  address_desc: "address desc 1" as never,
-  severity: "severity 1" as never,
-  report_channel: "report channel 1" as never,
-  status: "ASSIGNED" as never,
-  ...overrides
-});
-
-export const createFaultReportForm = createDefaultFaultReport;
-export const createFaultReportResponse = createDefaultFaultReport;
+/** 故障登记表单默认值，页面不在组件里散写默认结构。 */
+export function createFaultReportForm(
+  overrides: Partial<CreateFaultPayload> = {}
+): CreateFaultPayload {
+  return {
+    reporter_name: "",
+    phone: "",
+    asset_id: 0,
+    fault_type: "OUTAGE",
+    address_desc: "",
+    severity: "MEDIUM",
+    report_channel: "95598 热线",
+    ...overrides
+  };
+}
