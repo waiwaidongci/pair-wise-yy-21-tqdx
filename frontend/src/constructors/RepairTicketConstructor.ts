@@ -1,14 +1,16 @@
 import type { RepairTicket } from "../types/RepairTicket";
 
+// 待派工工单的默认结构（登记故障后由后端生成，前端列表占位也走这里）
 export const createDefaultRepairTicket = (overrides: Partial<RepairTicket> = {}): RepairTicket => ({
-  id: 1 as never,
-  fault_report_id: 1 as never,
-  team_id: 1 as never,
-  dispatcher_id: 1 as never,
-  priority: "priority 1" as never,
-  status: "ASSIGNED" as never,
-  assigned_at: "2026-06-11T09:00:00Z" as never,
-  restored_at: "2026-06-11T09:00:00Z" as never,
+  id: 0,
+  fault_report_id: 0,
+  team_id: null,
+  dispatcher_id: null,
+  priority: "MEDIUM",
+  status: "WAIT_DISPATCH",
+  assigned_at: null,
+  restored_at: null,
+  created_at: "",
   ...overrides
 });
 

@@ -1,1 +1,20 @@
-export const createFaultReportDto = (overrides = {}) => ({ id: 1, reporter_name: "reporter name 1", phone: "13800000001", asset_id: 1, fault_type: "VOLTAGE_LOW", address_desc: "address desc 1", severity: "severity 1", report_channel: "report channel 1", status: "ASSIGNED", ...overrides });
+import type { FaultReport } from "../models/FaultReport";
+import type { GridAsset } from "../models/GridAsset";
+
+export interface FaultReportDto extends FaultReport {
+  asset_code?: string;
+  feeder_line?: string;
+  ticket_id?: number | null;
+  ticket_status?: string | null;
+}
+
+export const createFaultReportDto = (
+  row: FaultReport,
+  refs: { asset?: GridAsset; ticketId?: number | null; ticketStatus?: string | null } = {}
+): FaultReportDto => ({
+  ...row,
+  asset_code: refs.asset?.asset_code,
+  feeder_line: refs.asset?.feeder_line,
+  ticket_id: refs.ticketId ?? null,
+  ticket_status: refs.ticketStatus ?? null
+});
